@@ -1,77 +1,66 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Free Fire Challenge - Riad Absi</title>
+    <title>Free Fire Challenge</title>
     <style>
-        body { background: #0a0a0a; color: white; font-family: sans-serif; text-align: center; margin: 0; overflow-x: hidden; }
-        .container { padding: 15px; max-width: 600px; margin: auto; position: relative; }
+        body { background: #0a0a0a; color: white; font-family: sans-serif; text-align: center; margin: 0; overflow-x: hidden; user-select: none; }
+        .container { padding: 15px; max-width: 500px; margin: auto; }
+        h1 { color: #ffd700; text-shadow: 2px 2px #ff4500; font-size: 24px; }
+        #timer-box { font-size: 30px; font-weight: bold; margin: 10px 0; padding: 10px; border-radius: 8px; background: #222; display: inline-block; min-width: 120px; border: 1px solid #444; color: #00ff00; }
+        .timer-danger { color: #ff0000 !important; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0.5; } }
+        #puzzle-board { display: grid; gap: 1px; margin: 15px auto; width: 92vw; height: 92vw; max-width: 400px; max-height: 400px; border: 2px solid #444; background: #111; }
+        .tile { background-repeat: no-repeat; border: 0.5px solid rgba(255,255,255,0.1); cursor: pointer; touch-action: none; }
+        .selected { border: 3px solid #00ff00 !important; z-index: 10; box-shadow: 0 0 15px #00ff00; }
         
-        #lang-btn { position: absolute; top: 10px; left: 10px; background: #444; color: white; border: 1px solid #ffd700; padding: 5px 10px; border-radius: 5px; cursor: pointer; z-index: 100; font-size: 12px; }
-        [dir="ltr"] #lang-btn { left: auto; right: 10px; }
-
-        h1 { color: #ffd700; text-shadow: 2px 2px #ff4500; font-size: 22px; margin-bottom: 5px; }
-        #timer-box { font-size: 28px; font-weight: bold; margin: 10px 0; padding: 5px; border-radius: 5px; background: #222; display: inline-block; min-width: 120px; border: 1px solid #444; }
-        .timer-normal { color: #00ff00; }
-        .timer-danger { color: #ff0000; animation: blink 1s infinite; }
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-        
-        #puzzle-board { display: grid; gap: 1px; margin: 10px auto; width: 95vw; height: 95vw; max-width: 450px; max-height: 450px; border: 2px solid #444; background: #111; }
-        .tile { background-repeat: no-repeat; border: 0.1px solid rgba(255,255,255,0.05); cursor: pointer; touch-action: none; }
-        .selected { border: 2px solid #00ff00 !important; z-index: 10; box-shadow: 0 0 15px #00ff00; }
-        
-        /* الزر الرمادي (قبل التجميع) */
+        /* THE BUTTON - Default Gray */
         #next-lvl-btn { 
-            background: #555; color: #999; border: none; padding: 15px 30px; 
+            background: #444; color: #888; border: none; padding: 15px; 
             font-size: 20px; font-weight: bold; border-radius: 30px; 
-            cursor: not-allowed; margin-top: 20px; width: 85%; 
+            width: 90%; margin-top: 20px; cursor: not-allowed; 
             pointer-events: none; transition: 0.4s; 
         }
         
-        /* الزر الأخضر (بعد التجميع) */
+        /* THE BUTTON - Active Green */
         #next-lvl-btn.active { 
             background: #28a745 !important; color: white !important; 
             cursor: pointer !important; pointer-events: auto !important; 
             box-shadow: 0 0 20px #28a745; border: 2px solid white; 
         }
 
-        .btn-retry { background: #ff4500; color: white; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; margin-top: 15px; }
+        .btn-retry { background: #ff4500; color: white; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; margin-top: 20px; }
         .hidden { display: none !important; }
-        #level-info { background: #222; padding: 10px; border-radius: 10px; margin-bottom: 5px; border-bottom: 2px solid #ffd700; }
+        #preview-img { width: 85%; border: 4px solid #ffd700; border-radius: 10px; margin-top: 10px; }
     </style>
 </head>
-<body id="body-tag">
+<body>
 
 <div class="container">
-    <button id="lang-btn" onclick="toggleLanguage()">English</button>
-    <h1 id="main-title">Free Fire Token</h1>
-    
-    <div id="level-info">
-        <span id="lvl-txt">المرحلة</span>: <span id="lvl">1</span> | <span id="pcs-txt">القطع</span>: <span id="pts">12</span>
-    </div>
-    
-    <div id="timer-box" class="timer-normal">02:00</div>
+    <h1>Free Fire Token</h1>
+    <div style="margin-bottom: 5px;">Level: <span id="lvl">1</span></div>
+    <div id="timer-box">02:00</div>
 
     <div id="preview-screen">
-        <p id="preview-msg">احفظ الصورة.. ستختفي سريعاً!</p>
-        <img id="preview-img" style="width:90%; max-width:280px; border:4px solid #ffd700; border-radius:10px;">
+        <p>Memorize the image!</p>
+        <img id="preview-img" src="">
     </div>
 
     <div id="game-screen" class="hidden">
         <div id="puzzle-board"></div>
-        <p id="help-msg" style="font-size: 13px; color: #aaa;">اضغط على قطعتين لتبديل أماكنهما</p>
-        <button id="next-lvl-btn" onclick="goNext()">LEVEL 2</button>
+        <p style="color: #aaa; font-size: 13px;">Tap two pieces to swap them</p>
+        <button id="next-lvl-btn" onclick="goNext()">NEXT LEVEL</button>
     </div>
 
     <div id="fail-screen" class="hidden">
-        <h2 id="fail-title" style="color: #ff0000;">انتهى الوقت! ⏰</h2>
-        <button class="btn-retry" onclick="initLevel()">إعادة المحاولة</button>
+        <h2 style="color: #ff0000;">TIME'S UP! ⏰</h2>
+        <button class="btn-retry" onclick="initLevel()">TRY AGAIN</button>
     </div>
 
     <div id="final-screen" class="hidden">
-        <h2 id="final-title" style="color: #ffd700;">🏆 أسطورة حقيقي! 🏆</h2>
-        <a href="https://t.me/Free_Fire_121"><button class="btn-retry" style="background:goldenrod">استلم جواهرك من هنا</button></a>
+        <h2 style="color: #ffd700;">🏆 YOU ARE A LEGEND! 🏆</h2>
+        <a href="https://t.me/Free_Fire_121"><button class="btn-retry" style="background:goldenrod">CLAIM DIAMONDS</button></a>
     </div>
 </div>
 
@@ -84,44 +73,22 @@
         { img: 'https://i.ibb.co/F42mpCrd/image.jpg', r: 10, c: 15 }
     ];
 
-    let cur = 0, firstTile = null, timeLeft = 120, timerInterval = null, currentLang = 'ar';
-
-    function toggleLanguage() {
-        currentLang = currentLang === 'ar' ? 'en' : 'ar';
-        document.getElementById('body-tag').dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-        updateUI();
-    }
-
-    function updateUI() {
-        const t = {
-            ar: { title: "Free Fire Token", lvl: "المرحلة", pcs: "القطع", pre: "احفظ الصورة.. ستختفي سريعاً!", help: "اضغط على قطعتين لتبديل أماكنهما", fail: "انتهى الوقت! ⏰", lang: "English" },
-            en: { title: "Free Fire Token", lvl: "Level", pcs: "Pieces", pre: "Memorize the image!", help: "Swap two pieces", fail: "Time's up! ⏰", lang: "عربي" }
-        }[currentLang];
-        document.getElementById('main-title').innerText = t.title;
-        document.getElementById('lang-btn').innerText = t.lang;
-        document.getElementById('lvl-txt').innerText = t.lvl;
-        document.getElementById('pcs-txt').innerText = t.pcs;
-        document.getElementById('preview-msg').innerText = t.pre;
-        document.getElementById('help-msg').innerText = t.help;
-        document.getElementById('fail-title').innerText = t.fail;
-    }
+    let cur = 0, firstTile = null, timeLeft = 120, timerInterval = null;
 
     function initLevel() {
         clearInterval(timerInterval);
         firstTile = null;
         const l = levels[cur];
         document.getElementById('lvl').innerText = cur + 1;
-        document.getElementById('pts').innerText = l.r * l.c;
         document.getElementById('preview-img').src = l.img;
         
         const btn = document.getElementById('next-lvl-btn');
         btn.classList.remove('active');
-        btn.innerText = cur === levels.length - 1 ? "FINISH" : "LEVEL " + (cur + 2);
+        btn.innerText = cur === levels.length - 1 ? "FINISH" : "NEXT LEVEL";
 
         document.getElementById('preview-screen').classList.remove('hidden');
         document.getElementById('game-screen').classList.add('hidden');
         document.getElementById('fail-screen').classList.add('hidden');
-        updateUI();
 
         setTimeout(() => {
             document.getElementById('preview-screen').classList.add('hidden');
@@ -138,7 +105,7 @@
             const m = Math.floor(timeLeft / 60), s = timeLeft % 60;
             const box = document.getElementById('timer-box');
             box.innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-            box.className = timeLeft <= 30 ? 'timer-danger' : 'timer-normal';
+            box.className = timeLeft <= 30 ? 'timer-danger' : '';
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
                 document.getElementById('game-screen').classList.add('hidden');
@@ -153,8 +120,8 @@
         board.style.gridTemplateColumns = `repeat(${l.c}, 1fr)`;
         board.innerHTML = '';
         
-        let pieces = Array.from({length: l.r * l.c}, (_, i) => i);
-        let shuffled = [...pieces].sort(() => Math.random() - 0.5);
+        let ids = Array.from({length: l.r * l.c}, (_, i) => i);
+        let shuffled = [...ids].sort(() => Math.random() - 0.5);
 
         shuffled.forEach(id => {
             const tile = document.createElement('div');
