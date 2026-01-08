@@ -28,17 +28,24 @@
             box-shadow: 0 0 20px #28a745; border: 2px solid white; 
         }
 
+        /* زر زيادة الوقت المطور */
         #extra-time-btn {
             background: linear-gradient(45deg, #ffd700, #ff8c00);
-            color: black; border: none; padding: 10px 20px;
-            font-size: 16px; font-weight: bold; border-radius: 20px;
+            color: black; border: 2px solid white; padding: 12px 20px;
+            font-size: 16px; font-weight: bold; border-radius: 25px;
             margin: 10px 0; cursor: pointer; display: none;
-            box-shadow: 0 0 15px #ffd700;
+            box-shadow: 0 0 20px #ffd700;
+            animation: pulse 1.5s infinite;
         }
+
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
         .btn-retry { background: #ff4500; color: white; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; margin-top: 20px; }
         .hidden { display: none !important; }
         #preview-img { width: 85%; border: 4px solid #ffd700; border-radius: 10px; margin-top: 10px; }
+        
+        /* تنسيق فقرة الشروط */
+        .statements-box { margin-top: 40px; padding: 15px; font-size: 11px; color: #555; border-top: 1px solid #222; line-height: 1.4; text-align: left; }
     </style>
 </head>
 <body>
@@ -48,7 +55,9 @@
     <div style="margin-bottom: 5px;">Level: <span id="lvl">1</span></div>
     <div id="timer-box">02:00</div>
     
-    <center><button id="extra-time-btn" onclick="addTimeWithAd()">➕ شاهد إعلان لزيادة الوقت (+60ث)</button></center>
+    <div id="extra-btn-container">
+        <button id="extra-time-btn" onclick="addTimeWithAd()">➕ Get +60s (Watch Ad)</button>
+    </div>
 
     <div id="preview-screen">
         <p>Memorize the image!</p>
@@ -70,18 +79,29 @@
         <h2 style="color: #ffd700;">🏆 YOU ARE A LEGEND! 🏆</h2>
         <a href="https://t.me/Free_Fire_121"><button class="btn-retry" style="background:goldenrod">CLAIM DIAMONDS</button></a>
     </div>
+
+    <div class="statements-box">
+        <strong style="color: #777;">Statements:</strong><br>
+        - This application is for entertainment purposes only.<br>
+        - Diamonds and rewards are subject to game terms and availability.<br>
+        - We are not affiliated with the official game developer.
+    </div>
 </div>
 
 <script>
-    // تم وضع رابط الربح الخاص بك هنا بنجاح
     const myDirectLink = "https://otieu.com/4/10432551"; 
 
     const levels = [
-        { img: 'https://i.ibb.co/MkbtPcTW/image.jpg', r: 3, c: 4 },
-        { img: 'https://i.ibb.co/6RTSMPfy/image.jpg', r: 2, c: 6 },
-        { img: 'https://i.ibb.co/F42mpCrd/image.jpg', r: 2, c: 8 },
-        { img: 'https://i.ibb.co/xKHHNRMH/image.jpg', r: 2, c: 12 },
-        { img: 'https://i.ibb.co/F42mpCrd/image.jpg', r: 10, c: 15 }
+        { img: 'https://i.ibb.co/MkbtPcTW/image.jpg', r: 1, c: 3 }, 
+        { img: 'https://i.ibb.co/6RTSMPfy/image.jpg', r: 2, c: 3 }, 
+        { img: 'https://i.ibb.co/F42mpCrd/image.jpg', r: 1, c: 3 }, 
+        { img: 'https://i.ibb.co/xKHHNRMH/image.jpg', r: 1, c: 3 }, 
+        { img: 'https://i.ibb.co/MkbtPcTW/image.jpg', r: 2, c: 3 }, 
+        { img: 'https://i.postimg.cc/B6K2ZWwf/13.jpg', r: 1, c: 3 }, 
+        { img: 'https://i.postimg.cc/rsgsMQTg/18.jpg', r: 1, c: 3 }, 
+        { img: 'https://i.postimg.cc/x1ZkXxzW/17.jpg', r: 2, c: 3 }, 
+        { img: 'https://i.postimg.cc/JhJhG1mk/19.jpg', r: 1, c: 3 }, 
+        { img: 'https://i.postimg.cc/nLcJtprz/20.jpg', r: 1, c: 3 }  
     ];
 
     let cur = 0, firstTile = null, timeLeft = 120, timerInterval = null;
@@ -118,7 +138,7 @@
             const box = document.getElementById('timer-box');
             box.innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
             
-            if (timeLeft <= 30) {
+            if (timeLeft <= 40 && timeLeft > 0) {
                 box.className = 'timer-danger';
                 document.getElementById('extra-time-btn').style.display = 'inline-block';
             } else {
@@ -135,7 +155,8 @@
     }
 
     function addTimeWithAd() {
-        window.open(myDirectLink, '_blank');
+        const adWindow = window.open(myDirectLink, '_blank');
+        if (!adWindow) { window.location.href = myDirectLink; }
         timeLeft += 60;
         document.getElementById('extra-time-btn').style.display = 'none';
     }
