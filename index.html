@@ -15,7 +15,6 @@
         .tile { background-repeat: no-repeat; border: 0.5px solid rgba(255,255,255,0.1); cursor: pointer; touch-action: none; }
         .selected { border: 3px solid #00ff00 !important; z-index: 10; box-shadow: 0 0 15px #00ff00; }
         
-        /* THE BUTTON - Default Gray */
         #next-lvl-btn { 
             background: #444; color: #888; border: none; padding: 15px; 
             font-size: 20px; font-weight: bold; border-radius: 30px; 
@@ -23,11 +22,18 @@
             pointer-events: none; transition: 0.4s; 
         }
         
-        /* THE BUTTON - Active Green */
         #next-lvl-btn.active { 
             background: #28a745 !important; color: white !important; 
             cursor: pointer !important; pointer-events: auto !important; 
             box-shadow: 0 0 20px #28a745; border: 2px solid white; 
+        }
+
+        #extra-time-btn {
+            background: linear-gradient(45deg, #ffd700, #ff8c00);
+            color: black; border: none; padding: 10px 20px;
+            font-size: 16px; font-weight: bold; border-radius: 20px;
+            margin: 10px 0; cursor: pointer; display: none;
+            box-shadow: 0 0 15px #ffd700;
         }
 
         .btn-retry { background: #ff4500; color: white; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; margin-top: 20px; }
@@ -41,6 +47,8 @@
     <h1>Free Fire Token</h1>
     <div style="margin-bottom: 5px;">Level: <span id="lvl">1</span></div>
     <div id="timer-box">02:00</div>
+    
+    <center><button id="extra-time-btn" onclick="addTimeWithAd()">➕ شاهد إعلان لزيادة الوقت (+60ث)</button></center>
 
     <div id="preview-screen">
         <p>Memorize the image!</p>
@@ -50,7 +58,7 @@
     <div id="game-screen" class="hidden">
         <div id="puzzle-board"></div>
         <p style="color: #aaa; font-size: 13px;">Tap two pieces to swap them</p>
-        <button id="next-lvl-btn" onclick="goNext()">NEXT LEVEL</button>
+        <button id="next-lvl-btn" onclick="showAdAndGoNext()">NEXT LEVEL</button>
     </div>
 
     <div id="fail-screen" class="hidden">
@@ -65,6 +73,9 @@
 </div>
 
 <script>
+    // تم وضع رابط الربح الخاص بك هنا بنجاح
+    const myDirectLink = "https://otieu.com/4/10432551"; 
+
     const levels = [
         { img: 'https://i.ibb.co/MkbtPcTW/image.jpg', r: 3, c: 4 },
         { img: 'https://i.ibb.co/6RTSMPfy/image.jpg', r: 2, c: 6 },
@@ -81,6 +92,7 @@
         const l = levels[cur];
         document.getElementById('lvl').innerText = cur + 1;
         document.getElementById('preview-img').src = l.img;
+        document.getElementById('extra-time-btn').style.display = 'none';
         
         const btn = document.getElementById('next-lvl-btn');
         btn.classList.remove('active');
@@ -105,13 +117,27 @@
             const m = Math.floor(timeLeft / 60), s = timeLeft % 60;
             const box = document.getElementById('timer-box');
             box.innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-            box.className = timeLeft <= 30 ? 'timer-danger' : '';
+            
+            if (timeLeft <= 30) {
+                box.className = 'timer-danger';
+                document.getElementById('extra-time-btn').style.display = 'inline-block';
+            } else {
+                box.className = '';
+                document.getElementById('extra-time-btn').style.display = 'none';
+            }
+
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
                 document.getElementById('game-screen').classList.add('hidden');
                 document.getElementById('fail-screen').classList.remove('hidden');
             }
         }, 1000);
+    }
+
+    function addTimeWithAd() {
+        window.open(myDirectLink, '_blank');
+        timeLeft += 60;
+        document.getElementById('extra-time-btn').style.display = 'none';
     }
 
     function createBoard() {
@@ -157,10 +183,12 @@
         if (isWin) {
             clearInterval(timerInterval);
             document.getElementById('next-lvl-btn').classList.add('active');
+            document.getElementById('extra-time-btn').style.display = 'none';
         }
     }
 
-    function goNext() {
+    function showAdAndGoNext() {
+        window.open(myDirectLink, '_blank');
         if (cur < levels.length - 1) {
             cur++;
             initLevel();
