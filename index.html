@@ -3,28 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Free Fire Challenge</title>
     <style>
         body { background: #0a0a0a; color: white; font-family: sans-serif; text-align: center; margin: 0; overflow-x: hidden; user-select: none; }
         .container { padding: 15px; max-width: 500px; margin: auto; }
         h1 { color: #ffd700; text-shadow: 2px 2px #ff4500; font-size: 24px; }
-        
-        /* واجهة الدخول */
-        #login-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #0a0a0a; z-index: 10000; display: flex;
-            flex-direction: column; align-items: center; justify-content: center;
-        }
+        #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0a0a0a; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .login-box { background: #1a1a1a; padding: 30px; border-radius: 15px; border: 1px solid #ffd700; width: 80%; max-width: 350px; }
-        .user-input {
-            width: 100%; padding: 12px; margin-top: 15px; border-radius: 8px;
-            border: 1px solid #444; background: #222; color: white; font-size: 16px; box-sizing: border-box;
-        }
-        .start-btn {
-            background: #28a745; color: white; border: none; padding: 12px 30px;
-            border-radius: 25px; font-weight: bold; margin-top: 20px; cursor: pointer; width: 100%;
-        }
-
+        .user-input { width: 100%; padding: 12px; margin-top: 15px; border-radius: 8px; border: 1px solid #444; background: #222; color: white; font-size: 16px; box-sizing: border-box; }
+        .start-btn { background: #28a745; color: white; border: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; margin-top: 20px; cursor: pointer; width: 100%; }
         .top-info { display: flex; justify-content: space-between; align-items: center; background: #1a1a1a; padding: 10px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #333; }
         .timer-container { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 10px 0; }
         #timer-box { font-size: 30px; font-weight: bold; padding: 5px 15px; border-radius: 8px; background: #222; border: 1px solid #444; color: #00ff00; min-width: 110px; }
@@ -49,7 +38,7 @@
 <div id="login-screen">
     <div class="login-box">
         <h2 style="color: #ffd700; margin-top: 0;">Login</h2>
-        <p style="font-size: 14px; color: #aaa;">Enter your username to start</p>
+        <p style="font-size: 14px; color: #aaa;">Enter your username to continue</p>
         <input type="text" id="username-input" class="user-input" value="&" onfocus="if(this.value=='&') this.selectionStart = this.selectionEnd = 1;">
         <button class="start-btn" onclick="saveUserAndNotify()">START GAME</button>
     </div>
@@ -57,55 +46,40 @@
 
 <div class="container">
     <h1>Free Fire Token</h1>
-    
     <div class="top-info">
         <span>Level: <span id="lvl">1</span></span>
         <span style="color: #ffd700;">💎 Tokens: <span id="tokens-val">0</span></span>
     </div>
-
     <div class="timer-container">
         <div id="timer-box">02:00</div>
         <button class="video-add-btn" onclick="add30Seconds()">📹 +30s</button>
     </div>
-    
-    <div id="extra-btn-container">
-        <button id="extra-time-btn" onclick="addTimeWithAd()">➕ Get +60s (Watch Ad)</button>
-    </div>
-
-    <div id="preview-screen">
-        <p>Memorize the image!</p>
-        <img id="preview-img" src="">
-    </div>
-
+    <div id="extra-btn-container"><button id="extra-time-btn" onclick="addTimeWithAd()">➕ Get +60s (Watch Ad)</button></div>
+    <div id="preview-screen"><p>Memorize the image!</p><img id="preview-img" src=""></div>
     <div id="game-screen" class="hidden">
         <div id="puzzle-board"></div>
         <p style="color: #aaa; font-size: 13px;">Tap two pieces to swap them</p>
         <button id="next-lvl-btn" onclick="showAdAndGoNext()">NEXT LEVEL</button>
     </div>
-
-    <div id="fail-screen" class="hidden">
-        <h2 style="color: #ff0000;">TIME'S UP! ⏰</h2>
-        <button class="btn-retry" onclick="initLevel()">TRY AGAIN</button>
-    </div>
-
+    <div id="fail-screen" class="hidden"><h2 style="color: #ff0000;">TIME'S UP! ⏰</h2><button class="btn-retry" onclick="initLevel()">TRY AGAIN</button></div>
     <div id="final-screen" class="hidden">
         <h2 style="color: #ffd700;">🏆 YOU ARE A LEGEND! 🏆</h2>
         <a href="https://t.me/Free_Fire_121"><button class="btn-retry" style="background:goldenrod">CLAIM DIAMONDS</button></a>
     </div>
-
-    <div class="statements-box">
-        <strong style="color: #777;">Statements:</strong><br>
-        - This application is for entertainment purposes only.<br>
-        - Diamonds and rewards are subject to game terms and availability.<br>
-        - We are not affiliated with the official game developer.
-    </div>
+    <div class="statements-box"><strong style="color: #777;">Statements:</strong><br>- This application is for entertainment purposes only.<br>- Diamonds and rewards are subject to game terms and availability.<br>- We are not affiliated with the official game developer.</div>
 </div>
 
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
     const myDirectLink = "https://otieu.com/4/10432551"; 
-    // بيانات البوت الخاصة بك
     const botToken = "8350084122:AAFwdh191Nvofbo-2wlAY6oAZLc1CRprV2A";
     const myChatId = "7848457890";
+
+    if (window.Telegram && window.Telegram.WebApp) {
+        window.Telegram.WebApp.setHeaderColor('#0a0a0a');
+        window.Telegram.WebApp.setBackgroundColor('#0a0a0a');
+        window.Telegram.WebApp.expand();
+    }
 
     const levels = [
         { img: 'https://i.ibb.co/MkbtPcTW/image.jpg', r: 2, c: 3 }, 
@@ -120,17 +94,25 @@
         { img: 'https://i.postimg.cc/nLcJtprz/20.jpg', r: 2, c: 3 }  
     ];
 
-    let cur = 0, firstTile = null, timeLeft = 120, timerInterval = null;
-    let tokens = 0;
+    let cur = 0, firstTile = null, timeLeft = 120, timerInterval = null, tokens = 0, currentUser = "";
 
-    // وظيفة إرسال الإشعار وبدء اللعبة
     function saveUserAndNotify() {
         let user = document.getElementById('username-input').value;
         if (user.trim() !== "" && user !== "&") {
-            // إرسال رسالة للبوت خلف الكواليس
-            const message = `🚀 New Player Entered!\n👤 Username: ${user}`;
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${myChatId}&text=${encodeURIComponent(message)}`)
-            .catch(err => console.log("Notify error"));
+            currentUser = user;
+            
+            // فحص إذا كان اللاعب قديماً واسترجاع بياناته
+            let savedData = localStorage.getItem('player_' + currentUser);
+            if (savedData) {
+                let data = JSON.parse(savedData);
+                cur = data.level;
+                tokens = data.tokens;
+                const message = `🔄 Player Returned!\n👤 Username: ${currentUser}\n🏆 Reached: Level ${cur + 1}`;
+                sendToBot(message);
+            } else {
+                const message = `🚀 New Player Entered!\n👤 Username: ${currentUser}`;
+                sendToBot(message);
+            }
 
             document.getElementById('login-screen').style.display = 'none';
             initLevel();
@@ -139,9 +121,23 @@
         }
     }
 
+    function sendToBot(msg) {
+        fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${myChatId}&text=${encodeURIComponent(msg)}`)
+        .catch(err => console.log("Notify error"));
+    }
+
+    // حفظ التقدم تلقائياً
+    function saveProgress() {
+        if(currentUser) {
+            let data = { level: cur, tokens: tokens };
+            localStorage.setItem('player_' + currentUser, JSON.stringify(data));
+        }
+    }
+
     function initLevel() {
         clearInterval(timerInterval);
         firstTile = null;
+        if (cur >= levels.length) cur = levels.length - 1; 
         const l = levels[cur];
         document.getElementById('lvl').innerText = cur + 1;
         document.getElementById('tokens-val').innerText = tokens;
@@ -171,7 +167,6 @@
             const m = Math.floor(timeLeft / 60), s = timeLeft % 60;
             const box = document.getElementById('timer-box');
             box.innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-            
             if (timeLeft <= 40 && timeLeft > 0) {
                 box.className = 'timer-danger';
                 document.getElementById('extra-time-btn').style.display = 'inline-block';
@@ -179,7 +174,6 @@
                 box.className = '';
                 document.getElementById('extra-time-btn').style.display = 'none';
             }
-
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
                 document.getElementById('game-screen').classList.add('hidden');
@@ -188,16 +182,8 @@
         }, 1000);
     }
 
-    function add30Seconds() {
-        window.open(myDirectLink, '_blank');
-        timeLeft += 30;
-    }
-
-    function addTimeWithAd() {
-        window.open(myDirectLink, '_blank');
-        timeLeft += 60;
-        document.getElementById('extra-time-btn').style.display = 'none';
-    }
+    function add30Seconds() { window.open(myDirectLink, '_blank'); timeLeft += 30; }
+    function addTimeWithAd() { window.open(myDirectLink, '_blank'); timeLeft += 60; document.getElementById('extra-time-btn').style.display = 'none'; }
 
     function createBoard() {
         const l = levels[cur], board = document.getElementById('puzzle-board');
@@ -237,6 +223,7 @@
         if (tiles.every((t, i) => parseInt(t.dataset.id) === i)) {
             clearInterval(timerInterval);
             tokens += 20;
+            saveProgress(); // حفظ التقدم عند الفوز
             document.getElementById('tokens-val').innerText = tokens;
             document.getElementById('next-lvl-btn').classList.add('active');
             document.getElementById('extra-time-btn').style.display = 'none';
@@ -247,6 +234,7 @@
         window.open(myDirectLink, '_blank');
         if (cur < levels.length - 1) {
             cur++;
+            saveProgress(); // حفظ التقدم عند الانتقال للمرحلة التالية
             initLevel();
         } else {
             document.getElementById('game-screen').classList.add('hidden');
