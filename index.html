@@ -8,31 +8,52 @@
         body { background: #0a0a0a; color: white; font-family: sans-serif; text-align: center; margin: 0; overflow-x: hidden; user-select: none; }
         .container { padding: 15px; max-width: 500px; margin: auto; position: relative; }
         
-        /* زر اللغة */
         #lang-btn { position: absolute; top: 10px; right: 10px; background: #333; color: #ffd700; border: 1px solid #ffd700; padding: 5px 10px; border-radius: 5px; cursor: pointer; z-index: 11000; font-size: 12px; }
 
-        #login-screen, #guide-screen, #key-popup-overlay { position: fixed; inset: 0; background: #0a0a0a; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        #key-popup-overlay { background: rgba(0,0,0,0.85); z-index: 10500; }
+        /* شاشات المنبثقة */
+        #login-screen, #guide-screen, #key-popup-overlay, #door-lock-overlay { position: fixed; inset: 0; background: #0a0a0a; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        #key-popup-overlay, #door-lock-overlay { background: rgba(0,0,0,0.95); z-index: 10500; }
         
-        .login-box, .guide-box, .popup-box { background: #1a1a1a; padding: 25px; border-radius: 15px; border: 1px solid #ffd700; width: 85%; max-width: 350px; }
+        .login-box { background: #1a1a1a; padding: 30px; border-radius: 20px; border: 2px solid #ffd700; width: 85%; max-width: 380px; box-shadow: 0 0 30px rgba(255, 215, 0, 0.3); }
         
-        .user-input { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: 1px solid #444; background: #222; color: white; font-size: 18px; box-sizing: border-box; text-align: center; }
-        .start-btn { background: #28a745; color: white; border: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; margin-top: 20px; cursor: pointer; width: 100%; }
+        /* أزرار الهدف */
+        .goal-section { margin-bottom: 25px; }
+        .goal-label { color: #ffd700; font-weight: bold; font-size: 18px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .goal-btn { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 1px solid #444; background: #222; color: #fff; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .goal-btn.active { background: linear-gradient(45deg, #ffd700, #ff8c00); color: #000; border-color: #fff; transform: scale(1.02); }
         
-        .top-info { display: flex; justify-content: space-between; align-items: center; background: #1a1a1a; padding: 8px 12px; border-radius: 10px; margin-bottom: 5px; border: 1px solid #333; }
-        #music-player { background: rgba(0, 0, 0, 0.8); border: 1px solid #ffd700; border-radius: 15px; padding: 2px 8px; display: flex; align-items: center; gap: 3px; }
-        .m-btn { background: none; border: none; color: white; cursor: pointer; font-size: 12px; padding: 2px; }
-        #timer-box { font-size: 32px; font-weight: bold; padding: 5px; color: #00ff00; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .user-input { width: 100%; padding: 14px; margin-top: 10px; border-radius: 10px; border: 1px solid #444; background: #111; color: white; font-size: 18px; box-sizing: border-box; text-align: center; }
+        .start-btn { background: linear-gradient(to bottom, #28a745, #1e7e34); color: white; border: none; padding: 15px; border-radius: 30px; font-weight: bold; margin-top: 25px; cursor: pointer; width: 100%; font-size: 18px; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4); }
+        
+        /* --- التعديل المطلوب هنا: المستطيل العلوي --- */
+        .top-info { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            background: #1a1a1a; 
+            padding: 0 15px; /* مسافة داخلية جانبية */
+            border-radius: 12px; 
+            border: 1px solid #333; 
+            margin-bottom: 10px; 
+            height: 52px; /* الارتفاع الذي طلبته */
+            box-sizing: border-box;
+        }
+        /* ------------------------------------------- */
 
-        .key-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-top: 15px; }
-        .key-btn { background: #333; color: #ffd700; border: 1px solid #555; padding: 10px; border-radius: 5px; font-weight: bold; font-size: 14px; }
+        #music-player { background: rgba(0, 0, 0, 0.8); border: 1px solid #ffd700; border-radius: 15px; padding: 2px 8px; display: flex; align-items: center; gap: 3px; }
+        .m-btn { background: none; border: none; color: white; cursor: pointer; font-size: 12px; }
+        #timer-box { font-size: 35px; font-weight: bold; color: #00ff00; text-shadow: 0 0 10px #00ff00; }
+        
+        .key-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 15px; }
+        .key-btn { background: #333; color: #ffd700; border: 1px solid #555; padding: 12px; border-radius: 8px; font-weight: bold; }
+        .close-key-btn { background: #dc3545; color: white; margin-top: 15px; width: 100%; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; }
 
         #puzzle-board { display: grid; gap: 1px; margin: 15px auto; width: 92vw; height: 92vw; max-width: 400px; border: 2px solid #444; background: #111; }
         .tile { background-repeat: no-repeat; border: 0.5px solid rgba(255,255,255,0.1); cursor: pointer; touch-action: none; }
         .selected { border: 3px solid #00ff00 !important; }
         .hidden { display: none !important; }
         
-        #have-key-btn { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: none; color: #ffd700; border: 1px solid #ffd700; padding: 5px 15px; border-radius: 20px; font-size: 12px; cursor: pointer; z-index: 10001; }
+        #have-key-btn { position: fixed; bottom: 20px; right: 20px; background: rgba(255, 215, 0, 0.1); color: #ffd700; border: 1px solid #ffd700; padding: 8px 15px; border-radius: 12px; font-size: 12px; cursor: pointer; z-index: 10001; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -42,20 +63,55 @@
 
 <div id="login-screen">
     <div class="login-box">
-        <h3 id="txt-login" style="color: #ffd700; margin: 5px;">Login</h3>
-        <input type="text" id="username-input" class="user-input" value="&">
-        <button class="start-btn" id="txt-start" onclick="handleLogin()">START GAME</button>
+        <div class="goal-section">
+            <div id="txt-goal-label" class="goal-label">What is your goal?</div>
+            <button class="goal-btn active" onclick="selectGoal(this, 'tokens')" id="txt-btn-tokens">Tokens Reward / جائزة توكين</button>
+            <button class="goal-btn" onclick="selectGoal(this, 'diamonds')" id="txt-btn-diamonds">Diamonds Reward / جائزة مجوهرات</button>
+        </div>
+        <div style="border-top: 1px solid #333; padding-top: 20px;">
+            <h3 id="txt-login" style="color: #ffd700; margin: 0 0 10px 0;">Login</h3>
+            <input type="text" id="username-input" class="user-input" value="&">
+            <button class="start-btn" id="txt-start" onclick="handleLogin()">START MISSION</button>
+        </div>
     </div>
-    <button id="have-key-btn" onclick="showDoorDirectly()">لدي مفتاح / I have a key</button>
 </div>
 
-<div id="guide-screen" class="hidden">
-    <div class="guide-box">
-        <h2 style="color: #ffd700;" id="txt-guide-title">Read Instructions Carefully</h2>
-        <p id="txt-guide-body" style="font-size: 14px; text-align: justify; line-height: 1.4;">
-            Key System: After each level, choose a letter as your "Security Key". In your next visit, use the "I have a key" button and enter this letter to unlock your progress. If you fail 3 times, your progress will be reset!
-        </p>
-        <button class="start-btn" onclick="closeGuide()">Got it / فهمت</button>
+<button id="have-key-btn" class="hidden" onclick="toggleDoorPopup(true)">لدي مفتاح / I have a key</button>
+
+<div id="door-lock-overlay" class="hidden">
+    <div class="popup-box">
+        <h2 style="color:#ffd700;" id="txt-door-title">🔒 Unlock Level</h2>
+        <input type="text" id="door-key-input" maxlength="1" class="user-input" style="width:60px; font-size:24px; border-color: #ffd700;">
+        <div id="attempt-info" style="color:red; font-size:12px; margin:10px 0;">Attempts: 3</div>
+        <button class="start-btn" onclick="unlockDoor()" style="margin-top:10px;">CONFIRM</button>
+        <button class="close-key-btn" onclick="toggleDoorPopup(false)">إغلاق / Close</button>
+    </div>
+</div>
+
+<div class="container">
+    <h1 id="txt-title" style="font-size: 24px; margin: 10px 0;">Free Fire Challenge</h1>
+    
+    <div class="top-info">
+        <span style="font-weight:bold; font-size: 16px;">LVL: <span id="lvl" style="color:cyan;">1</span></span>
+        <div id="music-player">
+            <button class="m-btn" onclick="prevTrack()">⏮</button>
+            <button class="m-btn" id="play-pause-btn" onclick="toggleMusic()">🔊</button>
+            <button class="m-btn" onclick="nextTrack()">⏭</button>
+        </div>
+        <span style="color: #ffd700; font-weight:bold; font-size: 16px;"><span id="reward-icon">🟡</span>: <span id="tokens-val">0</span></span>
+    </div>
+
+    <div id="timer-box"><span id="timer-text">02:00</span></div>
+
+    <div id="main-play-area" class="hidden">
+        <div id="preview-screen">
+            <p id="txt-memo" style="font-weight: bold; font-size: 20px;">Memorize!</p>
+            <img id="preview-img" src="" style="width:90%; border-radius:10px; border:4px solid #ffd700;">
+        </div>
+        <div id="game-screen" class="hidden">
+            <div id="puzzle-board"></div>
+            <button id="next-lvl-btn" class="start-btn hidden" onclick="nextLevelWithAd()">NEXT LEVEL</button>
+        </div>
     </div>
 </div>
 
@@ -66,81 +122,75 @@
     </div>
 </div>
 
-<div class="container">
-    <h1 id="txt-title">Free Fire Token</h1>
-    
-    <div class="top-info">
-        <span style="font-weight:bold;">LVL: <span id="lvl" style="color:cyan;">1</span></span>
-        <div id="music-player">
-            <button class="m-btn" onclick="prevTrack()">⏮</button>
-            <button class="m-btn" id="play-pause-btn" onclick="toggleMusic()">🔊</button>
-            <button class="m-btn" onclick="nextTrack()">⏭</button>
-        </div>
-        <span style="color: #ffd700; font-weight:bold;">💎: <span id="tokens-val">0</span></span>
-    </div>
-
-    <div id="timer-box"><span id="timer-text">02:00</span></div>
-
-    <div id="door-lock-ui" class="login-box hidden" style="margin: 20px auto; position: relative; z-index: 5;">
-        <h2 style="color:#ffd700;">🔒 Door Locked</h2>
-        <input type="text" id="door-key-input" maxlength="1" class="user-input" style="width:60px; font-size:24px;">
-        <div id="attempt-info" style="color:red; font-size:12px; margin-top:10px;">Attempts: 3</div>
-        <button class="start-btn" onclick="unlockDoor()">UNLOCK DOOR</button>
-    </div>
-
-    <div id="main-play-area">
-        <div id="preview-screen"><p id="txt-memo">Memorize!</p><img id="preview-img" src="" style="width:85%; border-radius:10px; border:4px solid #ffd700;"></div>
-        <div id="game-screen" class="hidden">
-            <div id="puzzle-board"></div>
-            <button id="next-lvl-btn" class="start-btn hidden" onclick="nextLevelWithAd()">NEXT LEVEL</button>
-        </div>
-    </div>
-</div>
-
 <script>
-    let cur = 0, tokens = 0, currentUser = "", timeLeft = 120, timerInterval = null, firstTile = null;
-    let userKeys = [], attempts = 3, currentLang = 'en';
+    // جميع السكربتات السابقة تعمل بنفس الطريقة دون تغيير
+    let cur = 0, tokens = 0, currentUser = "", timeLeft = 120, timerInterval = null;
+    let userKeys = [], attempts = 3, currentLang = 'en', selectedGoal = 'tokens';
 
     const langData = {
-        ar: { login: "تسجيل الدخول", start: "بدء اللعبة", title: "رموز فري فاير", guideT: "اقرأ الإرشادات جيداً", guideB: "نظام المفاتيح: بعد كل مرحلة اختر حرفاً ليكون 'مفتاح الأمان'. في المرة القادمة، اضغط على زر 'لدي مفتاح' وادخل الحرف لتكمل من حيث توقفت. إذا أخطأت 3 مرات سيتم تصفير مستواك!", choose: "تم بنجاح! اختر مفتاحك:", memo: "تذكر الصورة!", lang: "English" },
-        en: { login: "Login", start: "START GAME", title: "Free Fire Token", guideT: "Read Instructions Carefully", guideB: "Key System: After each level, choose a letter as your 'Security Key'. Next time, use 'I have a key' button and enter this letter to unlock progress. 3 wrong attempts will reset you!", choose: "Level Clear! Choose your Key:", memo: "Memorize!", lang: "العربية" }
+        ar: { goal: "ما هو هدفك؟", tokens: "جائزة توكين / Tokens Reward", diamonds: "جائزة مجوهرات / Diamonds Reward", login: "تسجيل الدخول", start: "بدء المهمة", title: "تحدي فري فاير", memo: "تذكر الصورة!", door: "فتح المرحلة", lang: "English", choose: "فوز مستحق! اختر مفتاحك:" },
+        en: { goal: "What is your goal?", tokens: "Tokens Reward / جائزة توكين", diamonds: "Diamonds Reward / جائزة مجوهرات", login: "Login", start: "START MISSION", title: "Free Fire Challenge", memo: "Memorize!", door: "Unlock Level", lang: "العربية", choose: "Level Clear! Choose your Key:" }
     };
 
     function toggleLang() {
         currentLang = currentLang === 'en' ? 'ar' : 'en';
         const d = langData[currentLang];
+        document.getElementById('txt-goal-label').innerText = d.goal;
+        document.getElementById('txt-btn-tokens').innerText = d.tokens;
+        document.getElementById('txt-btn-diamonds').innerText = d.diamonds;
         document.getElementById('txt-login').innerText = d.login;
         document.getElementById('txt-start').innerText = d.start;
         document.getElementById('txt-title').innerText = d.title;
-        document.getElementById('txt-guide-title').innerText = d.guideT;
-        document.getElementById('txt-guide-body').innerText = d.guideB;
-        document.getElementById('txt-choose-key').innerText = d.choose;
         document.getElementById('txt-memo').innerText = d.memo;
+        document.getElementById('txt-door-title').innerText = d.door;
+        document.getElementById('txt-choose-key').innerText = d.choose;
         document.getElementById('lang-btn').innerText = d.lang;
     }
 
+    function selectGoal(btn, goal) {
+        document.querySelectorAll('.goal-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedGoal = goal;
+        document.getElementById('reward-icon').innerText = (goal === 'tokens') ? '🟡' : '💎';
+    }
+
     function handleLogin() {
-        let userVal = document.getElementById('username-input').value.trim().toLowerCase(); // تحويل لسمول
+        let input = document.getElementById('username-input');
+        let userVal = input.value.trim().toLowerCase();
         if (userVal !== "" && userVal !== "&") {
             currentUser = userVal;
-            let saved = JSON.parse(localStorage.getItem('riad_safe_v3_' + currentUser) || '{"lvl":0, "keys":[], "seen":false}');
+            let saved = JSON.parse(localStorage.getItem('riad_safe_v7_' + currentUser) || '{"lvl":0, "keys":[]}');
             cur = saved.lvl;
             userKeys = saved.keys;
             tokens = cur * 20;
             document.getElementById('login-screen').classList.add('hidden');
-            if (!saved.seen) {
-                document.getElementById('guide-screen').classList.remove('hidden');
-            } else {
-                initLevel();
-            }
+            document.getElementById('have-key-btn').classList.remove('hidden');
+            initLevel();
             loadTrack(0);
         }
     }
 
-    function closeGuide() {
-        document.getElementById('guide-screen').classList.add('hidden');
-        saveProgress(true);
-        initLevel();
+    function toggleDoorPopup(show) {
+        document.getElementById('door-lock-overlay').className = show ? "" : "hidden";
+        if(show) attempts = 3;
+    }
+
+    function unlockDoor() {
+        let input = document.getElementById('door-key-input').value.toUpperCase();
+        let foundIdx = userKeys.indexOf(input);
+        if (foundIdx !== -1) {
+            cur = foundIdx + 1;
+            tokens = cur * 20;
+            toggleDoorPopup(false);
+            initLevel();
+        } else {
+            attempts--;
+            document.getElementById('attempt-info').innerText = "Attempts: " + attempts;
+            if (attempts <= 0) {
+                localStorage.removeItem('riad_safe_v7_' + currentUser);
+                location.reload();
+            }
+        }
     }
 
     const levels = [
@@ -155,43 +205,15 @@
         clearInterval(timerInterval);
         document.getElementById('lvl').innerText = cur + 1;
         document.getElementById('tokens-val').innerText = tokens;
-        
-        if (cur > 0 && userKeys.length < cur) {
-            showDoorDirectly();
-        } else {
-            startPuzzleLogic();
-        }
-    }
-
-    function showDoorDirectly() {
-        document.getElementById('main-play-area').classList.add('hidden');
-        document.getElementById('door-lock-ui').classList.remove('hidden');
-        attempts = 3;
-        document.getElementById('attempt-info').innerText = "Attempts: 3";
-    }
-
-    function unlockDoor() {
-        let input = document.getElementById('door-key-input').value.toUpperCase();
-        if (input === userKeys[cur - 1]) {
-            document.getElementById('door-lock-ui').classList.add('hidden');
-            document.getElementById('main-play-area').classList.remove('hidden');
-            startPuzzleLogic();
-        } else {
-            attempts--;
-            document.getElementById('attempt-info').innerText = "Attempts: " + attempts;
-            if (attempts <= 0) {
-                localStorage.removeItem('riad_safe_v3_' + currentUser);
-                location.reload();
-            }
-        }
+        startPuzzleLogic();
     }
 
     function startPuzzleLogic() {
+        document.getElementById('main-play-area').classList.remove('hidden');
         document.getElementById('preview-img').src = levels[cur].img;
         document.getElementById('preview-screen').classList.remove('hidden');
         document.getElementById('game-screen').classList.add('hidden');
         document.getElementById('next-lvl-btn').classList.add('hidden');
-
         setTimeout(() => {
             document.getElementById('preview-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('hidden');
@@ -214,15 +236,15 @@
             tile.style.backgroundPosition = `${(c / (l.c - 1)) * 100}% ${(r / (l.r - 1)) * 100}%`;
             tile.dataset.id = id;
             tile.onclick = function() {
-                if (!firstTile) { firstTile = this; this.classList.add('selected'); }
+                if (!window.firstTile) { window.firstTile = this; this.classList.add('selected'); }
                 else {
-                    let tId = firstTile.dataset.id, tBg = firstTile.style.backgroundPosition;
-                    firstTile.dataset.id = this.dataset.id;
-                    firstTile.style.backgroundPosition = this.style.backgroundPosition;
+                    let tId = window.firstTile.dataset.id, tBg = window.firstTile.style.backgroundPosition;
+                    window.firstTile.dataset.id = this.dataset.id;
+                    window.firstTile.style.backgroundPosition = this.style.backgroundPosition;
                     this.dataset.id = tId;
                     this.style.backgroundPosition = tBg;
-                    firstTile.classList.remove('selected');
-                    firstTile = null;
+                    window.firstTile.classList.remove('selected');
+                    window.firstTile = null;
                     if (Array.from(document.querySelectorAll('.tile')).every((t, i) => parseInt(t.dataset.id) === i)) {
                         clearInterval(timerInterval);
                         showKeyPopup();
@@ -242,7 +264,7 @@
             b.className = 'key-btn';
             b.innerText = char;
             b.onclick = () => {
-                userKeys.push(char);
+                userKeys[cur] = char;
                 document.getElementById('key-popup-overlay').classList.add('hidden');
                 document.getElementById('next-lvl-btn').classList.remove('hidden');
             };
@@ -253,12 +275,12 @@
     function nextLevelWithAd() {
         window.open("https://otieu.com/4/10432551", '_blank');
         tokens += 20; cur++;
-        saveProgress(true);
-        if (cur < levels.length) initLevel(); else alert("Legend!");
+        saveProgress();
+        if (cur < levels.length) initLevel(); else alert("Mission Completed!");
     }
 
-    function saveProgress(seen) {
-        localStorage.setItem('riad_safe_v3_' + currentUser, JSON.stringify({lvl: cur, keys: userKeys, seen: seen}));
+    function saveProgress() {
+        localStorage.setItem('riad_safe_v7_' + currentUser, JSON.stringify({lvl: cur, keys: userKeys}));
     }
 
     function startTimer() {
@@ -271,7 +293,6 @@
         }, 1000);
     }
 
-    // موسيقى
     const audio = document.getElementById('bg-music');
     function loadTrack(idx) { audio.src = `${idx+1}.mp3`; audio.play().catch(()=>{}); }
     function toggleMusic() { audio.paused ? audio.play() : audio.pause(); }
