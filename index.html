@@ -3,40 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Free Fire Challenge - Riad System</title>
+    <title>Free Fire Challenge - Riad Pro</title>
     <style>
         body { background: #0a0a0a; color: white; font-family: sans-serif; text-align: center; margin: 0; overflow-x: hidden; user-select: none; }
         .container { padding: 15px; max-width: 500px; margin: auto; }
+        h1 { color: #ffd700; text-shadow: 2px 2px #ff4500; font-size: 24px; margin-bottom: 5px; }
         
-        h1 { color: #ffd700; text-shadow: 2px 2px #ff4500; font-size: 24px; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        
-        /* واجهة الدخول المطورة */
         #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0a0a0a; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .login-box { background: #1a1a1a; padding: 25px; border-radius: 15px; border: 1px solid #ffd700; width: 85%; max-width: 350px; }
+        .goal-title { color: #ffd700; font-weight: bold; margin-bottom: 15px; font-size: 16px; text-transform: uppercase; }
+        .goal-buttons { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+        .goal-btn { background: #333; color: #fff; border: 1px solid #555; padding: 8px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; }
+        .goal-btn.active { background: #ffd700; color: black; border-color: #fff; }
         .user-input { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: 1px solid #444; background: #222; color: white; font-size: 18px; box-sizing: border-box; text-align: center; }
         .start-btn { background: #28a745; color: white; border: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; margin-top: 20px; cursor: pointer; width: 100%; }
         
-        /* شريط المعلومات العلوي */
         .top-info { display: flex; justify-content: space-between; align-items: center; background: #1a1a1a; padding: 8px 12px; border-radius: 10px; margin-bottom: 5px; border: 1px solid #333; }
         #music-player { background: rgba(0, 0, 0, 0.8); border: 1px solid #ffd700; border-radius: 15px; padding: 2px 8px; display: flex; align-items: center; gap: 3px; }
-        .m-btn { background: none; border: none; color: white; cursor: pointer; font-size: 12px; }
-        #track-name { color: #ffd700; font-size: 9px; font-weight: bold; }
-        #timer-box { font-size: 18px; font-weight: bold; color: #00ff00; }
+        .m-btn { background: none; border: none; color: white; cursor: pointer; font-size: 12px; padding: 2px; }
+        #track-name { color: #ffd700; font-size: 9px; font-weight: bold; white-space: nowrap; }
 
-        /* نظام الأقفال والاختيارات */
-        .lock-panel { background: #151515; padding: 15px; border-radius: 12px; border: 1px dashed #ffd700; margin: 10px 0; }
+        #timer-box { font-size: 32px; font-weight: bold; padding: 5px; color: #00ff00; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .timer-red { color: #ff0000 !important; animation: blink 0.6s infinite; }
+        @keyframes blink { 50% { opacity: 0.5; } }
+
+        /* نظام الأبواب والمفاتيح */
+        .lock-panel { background: #151515; padding: 15px; border-radius: 12px; border: 2px dashed #ffd700; margin: 15px 0; }
         .key-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-top: 10px; }
-        .key-btn { background: #333; color: #ffd700; border: 1px solid #555; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        
-        /* إعلانات فيديو ام */
-        .ad-ticker-box { background: #111; border: 2px solid #ffd700; height: 55px; overflow: hidden; position: relative; display: flex; align-items: center; margin: 10px 0; border-radius: 8px; }
-        #external-ads { white-space: nowrap; position: absolute; width: 100%; color: #ffd700; font-weight: bold; font-size: 16px; }
+        .key-btn { background: #333; color: #ffd700; border: 1px solid #555; padding: 10px; border-radius: 5px; font-weight: bold; }
+
+        .ad-ticker-box { background: #222; border: 1px solid #444; height: 40px; overflow: hidden; position: relative; display: flex; align-items: center; margin: 10px 0; border-radius: 8px; }
+        #external-ads { white-space: nowrap; position: absolute; animation: marquee 30s linear infinite; color: #ffd700; font-weight: bold; font-size: 15px; width: 100%; }
+        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
         #puzzle-board { display: grid; gap: 1px; margin: 15px auto; width: 92vw; height: 92vw; max-width: 400px; border: 2px solid #444; background: #111; }
-        .tile { background-repeat: no-repeat; cursor: pointer; touch-action: none; }
+        .tile { background-repeat: no-repeat; border: 0.5px solid rgba(255,255,255,0.1); cursor: pointer; touch-action: none; }
         .selected { border: 3px solid #00ff00 !important; }
         .hidden { display: none !important; }
-        #next-lvl-btn { background: #444; color: #888; border: none; padding: 15px; font-size: 20px; font-weight: bold; border-radius: 30px; width: 90%; margin-top: 20px; cursor: not-allowed; }
+        #next-lvl-btn { background: #444; color: #888; border: none; padding: 15px; font-size: 20px; font-weight: bold; border-radius: 30px; width: 90%; margin-top: 20px; cursor: not-allowed; pointer-events: none; }
         #next-lvl-btn.active { background: #28a745 !important; color: white !important; cursor: pointer !important; pointer-events: auto !important; }
     </style>
 </head>
@@ -46,92 +50,102 @@
 
 <div id="login-screen">
     <div class="login-box">
-        <div style="color:#ffd700; font-weight:bold; margin-bottom:10px;">WELCOME PLAYER</div>
-        <p style="color:#ff4500; font-size:11px;">⚠️ احفظ اسمك جيداً لاسترداد مستواك</p>
-        <input type="text" id="username-input" class="user-input" placeholder="Username (Min 6 chars)">
+        <div class="goal-title">What is your goal?</div>
+        <div class="goal-buttons">
+            <button class="goal-btn" onclick="selectGoal(this)">Free Fire Diamonds</button>
+            <button class="goal-btn" onclick="selectGoal(this)">Free Fire Tokens</button>
+        </div>
+        <hr style="border: 0.5px solid #333; margin-bottom: 10px;">
+        <h3 style="color: #ffd700; margin: 5px;">Login</h3>
+        <input type="text" id="username-input" class="user-input" value="&">
         <button class="start-btn" onclick="handleLogin()">START GAME</button>
     </div>
 </div>
 
 <div class="container">
-    <h1>Free Fire Token <span>💎 <span id="tokens-val">0</span></span></h1>
+    <h1>Free Fire Token</h1>
     
     <div class="top-info">
-        <span>LVL: <span id="lvl" style="color:cyan;">1</span></span>
+        <span style="font-weight:bold;">Level: <span id="lvl" style="color:cyan;">1</span></span>
         <div id="music-player">
             <button class="m-btn" onclick="prevTrack()">⏮</button>
             <button class="m-btn" id="play-pause-btn" onclick="toggleMusic()">🔊</button>
             <button class="m-btn" onclick="nextTrack()">⏭</button>
             <span id="track-name">Track 1</span>
         </div>
-        <div id="timer-box"><span id="timer-text">02:00</span></div>
+        <span style="color: #ffd700; font-weight:bold;">💎 Tokens: <span id="tokens-val">0</span></span>
     </div>
 
-    <div class="ad-ticker-box"><div id="external-ads">Loading System...</div></div>
+    <div id="timer-box">
+        <span id="timer-text">02:00</span>
+        <span id="add-time-area"></span>
+    </div>
+
+    <div class="ad-ticker-box">
+        <div id="external-ads">🚀 Welcome Riad! System Security Active 🚀</div>
+    </div>
 
     <div id="game-area">
-        <div id="lock-screen-ui" class="lock-panel hidden">
-            <h3 style="color:#ffd700;">🔒 الباب مغلق</h3>
-            <p style="font-size:12px;">أدخل مفتاح المرور للمرحلة السابقة:</p>
-            <input type="text" id="key-entry" maxlength="1" class="user-input" style="width:60px; margin:10px auto;">
-            <div id="attempt-txt" style="color:red; font-size:12px;">محاولات متبقية: 3</div>
-            <button class="start-btn" onclick="verifyDoorKey()">فتح الباب</button>
+        <div id="door-lock-ui" class="lock-panel hidden">
+            <h2 style="color:#ffd700;">🔒 Door Locked</h2>
+            <p style="font-size:12px;">Enter the key you chose for the previous level:</p>
+            <input type="text" id="door-key-input" maxlength="1" class="user-input" style="width:60px; margin:10px auto; font-size:24px;">
+            <div id="attempt-info" style="color:red; font-size:12px; margin-bottom:10px;">Attempts: 3</div>
+            <button class="start-btn" onclick="unlockDoor()">UNLOCK DOOR</button>
         </div>
 
-        <div id="play-ui">
+        <div id="main-play-ui">
             <div id="preview-screen"><p>Memorize!</p><img id="preview-img" src="" style="width:85%; border-radius:10px; border:4px solid #ffd700;"></div>
             <div id="game-screen" class="hidden">
                 <div id="puzzle-board"></div>
                 
-                <div id="key-selector-ui" class="lock-panel hidden">
-                    <p style="font-size:12px; color:#00ff00;">🏆 مبروك! اختر مفتاح مرور لهذه المرحلة:</p>
-                    <div class="key-grid" id="key-buttons-container"></div>
+                <div id="key-picker-ui" class="lock-panel hidden">
+                    <p style="color:#00ff00; font-weight:bold;">🏆 Level Clear! Choose your Key:</p>
+                    <div class="key-grid" id="key-buttons"></div>
                 </div>
-                
-                <button id="next-lvl-btn" class="hidden" onclick="proceedToNextLevel()">NEXT LEVEL</button>
+
+                <button id="next-lvl-btn" onclick="nextLevelWithAd()">NEXT LEVEL</button>
             </div>
         </div>
     </div>
 
-    <div id="fail-screen" class="hidden"><h2>TIME'S UP!</h2><button class="start-btn" onclick="initLevel()">TRY AGAIN</button></div>
+    <div id="fail-screen" class="hidden"><h2>TIME'S UP!</h2><button class="start-btn" onclick="initLevel()" style="background:#ff4500;">TRY AGAIN</button></div>
     <div id="final-screen" class="hidden">
         <h2 style="color: #ffd700;">LEGEND!</h2>
-        <p style="font-size:12px;">كود الفوز النهائي:</p>
-        <h3 id="victory-code" style="color:#00ff00; letter-spacing:3px;">---</h3>
-        <a href="https://t.me/Free_Fire_121"><button class="start-btn" style="background:goldenrod">CLAIM</button></a>
+        <p style="font-size:12px;">Your Final Security Code:</p>
+        <h3 id="final-code-display" style="color:#00ff00; letter-spacing:5px;"></h3>
+        <a href="https://t.me/Free_Fire_121"><button class="start-btn" style="background:goldenrod">CLAIM VIA TELEGRAM</button></a>
     </div>
 </div>
 
 <script>
-    let currentUser = "", cur = 0, tokens = 0, timeLeft = 120, timerInterval = null, firstTile = null;
-    let attempts = 3, userKeys = [];
+    let cur = 0, tokens = 0, currentUser = "", timeLeft = 120, timerInterval = null, firstTile = null;
+    let userKeys = [], attempts = 3;
 
-    // جلب إعلان فيديو ام
-    fetch('video_m').then(r => r.text()).then(d => { document.getElementById('external-ads').innerHTML = d; });
-
-    // نظام الموسيقى
+    // موسيقى
     const tracks = Array.from({length: 15}, (_, i) => `${i+1}.mp3`);
     let currentTrackIdx = 0;
     const audio = document.getElementById('bg-music');
-    function loadTrack(idx) { audio.src = tracks[idx]; audio.play().catch(()=>{}); }
+    function loadTrack(idx) { audio.src = tracks[idx]; document.getElementById('track-name').innerText = "Music " + (idx + 1); audio.play().catch(()=>{}); }
     function toggleMusic() { audio.paused ? audio.play() : audio.pause(); }
     function nextTrack() { currentTrackIdx = (currentTrackIdx + 1) % tracks.length; loadTrack(currentTrackIdx); }
     function prevTrack() { currentTrackIdx = (currentTrackIdx - 1 + tracks.length) % tracks.length; loadTrack(currentTrackIdx); }
 
-    // تسجيل الدخول والمزامنة
-    function handleLogin() {
-        let val = document.getElementById('username-input').value.trim();
-        if (val.length < 6 || val === "&") { alert("الاسم يجب أن يكون 6 أحرف أو أكثر!"); return; }
-        currentUser = val.toLowerCase();
-        
-        let savedData = JSON.parse(localStorage.getItem('ff_data_' + currentUser) || '{"lvl":0, "keys":[]}');
-        cur = savedData.lvl;
-        userKeys = savedData.keys;
-        tokens = cur * 20;
+    function selectGoal(btn) { document.querySelectorAll('.goal-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
 
-        document.getElementById('login-screen').style.display = 'none';
-        loadTrack(currentTrackIdx);
-        initLevel();
+    function handleLogin() {
+        let userVal = document.getElementById('username-input').value.trim();
+        if (userVal !== "" && userVal !== "&") {
+            currentUser = userVal.toLowerCase();
+            let saved = JSON.parse(localStorage.getItem('riad_save_' + currentUser) || '{"lvl":0, "keys":[]}');
+            cur = saved.lvl;
+            userKeys = saved.keys;
+            tokens = cur * 20;
+            audio.volume = 0.5;
+            loadTrack(currentTrackIdx);
+            document.getElementById('login-screen').style.display = 'none';
+            initLevel();
+        }
     }
 
     const levels = [
@@ -153,39 +167,39 @@
         document.getElementById('tokens-val').innerText = tokens;
         document.getElementById('fail-screen').classList.add('hidden');
         
-        // فحص: هل الباب يحتاج مفتاح؟ (لو المستوى الحالي أكبر من عدد المفاتيح المخزنة)
+        // التحقق من الباب
         if (cur > 0 && userKeys.length < cur) {
-            document.getElementById('play-ui').classList.add('hidden');
-            document.getElementById('lock-screen-ui').classList.remove('hidden');
+            document.getElementById('main-play-ui').classList.add('hidden');
+            document.getElementById('door-lock-ui').classList.remove('hidden');
             attempts = 3;
-            document.getElementById('attempt-txt').innerText = "محاولات متبقية: 3";
+            document.getElementById('attempt-info').innerText = "Attempts: 3";
         } else {
-            startPuzzleSequence();
+            startPuzzle();
         }
     }
 
-    function startPuzzleSequence() {
-        document.getElementById('play-ui').classList.remove('hidden');
-        document.getElementById('lock-screen-ui').classList.add('hidden');
+    function startPuzzle() {
+        document.getElementById('main-play-ui').classList.remove('hidden');
+        document.getElementById('door-lock-ui').classList.add('hidden');
         document.getElementById('preview-img').src = levels[cur].img;
         document.getElementById('preview-screen').classList.remove('hidden');
         document.getElementById('game-screen').classList.add('hidden');
+        document.getElementById('next-lvl-btn').classList.remove('active');
         document.getElementById('next-lvl-btn').classList.add('hidden');
-        document.getElementById('key-selector-ui').classList.add('hidden');
+        document.getElementById('key-picker-ui').classList.add('hidden');
 
         setTimeout(() => {
             document.getElementById('preview-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('hidden');
-            createBoard();
-            startTimer();
+            createBoard(); startTimer();
         }, 3000);
     }
 
     function createBoard() {
         const l = levels[cur], board = document.getElementById('puzzle-board');
-        board.innerHTML = '';
         board.style.gridTemplateRows = `repeat(${l.r}, 1fr)`;
         board.style.gridTemplateColumns = `repeat(${l.c}, 1fr)`;
+        board.innerHTML = '';
         let ids = Array.from({length: l.r * l.c}, (_, i) => i).sort(() => Math.random() - 0.5);
         ids.forEach(id => {
             const tile = document.createElement('div');
@@ -206,7 +220,8 @@
                     firstTile.classList.remove('selected');
                     firstTile = null;
                     if (Array.from(document.querySelectorAll('.tile')).every((t, i) => parseInt(t.dataset.id) === i)) {
-                        onWinLevel();
+                        clearInterval(timerInterval);
+                        showKeyPicker();
                     }
                 }
             };
@@ -214,58 +229,51 @@
         });
     }
 
-    function onWinLevel() {
-        clearInterval(timerInterval);
-        document.getElementById('key-selector-ui').classList.remove('hidden');
-        const container = document.getElementById('key-buttons-container');
+    function showKeyPicker() {
+        document.getElementById('key-picker-ui').classList.remove('hidden');
+        const container = document.getElementById('key-buttons');
         container.innerHTML = '';
         "ABCDE12345FGHIJ67890".split('').forEach(char => {
             let b = document.createElement('button');
             b.className = 'key-btn';
             b.innerText = char;
-            b.onclick = () => selectStepKey(char);
+            b.onclick = () => {
+                userKeys.push(char);
+                document.getElementById('key-picker-ui').classList.add('hidden');
+                document.getElementById('next-lvl-btn').classList.remove('hidden');
+                document.getElementById('next-lvl-btn').classList.add('active');
+            };
             container.appendChild(b);
         });
     }
 
-    function selectStepKey(char) {
-        userKeys.push(char);
-        document.getElementById('key-selector-ui').classList.add('hidden');
-        document.getElementById('next-lvl-btn').classList.remove('hidden');
-        document.getElementById('next-lvl-btn').classList.add('active');
-    }
-
-    function proceedToNextLevel() {
+    function nextLevelWithAd() {
         window.open("https://otieu.com/4/10432551", '_blank');
         tokens += 20;
         cur++;
         saveProgress();
-        if (cur < levels.length) {
-            initLevel();
-        } else {
-            showFinal();
-        }
+        if (cur < levels.length) { initLevel(); }
+        else { showFinal(); }
     }
 
-    function verifyDoorKey() {
-        let input = document.getElementById('key-entry').value.toUpperCase();
-        let correct = userKeys[cur - 1];
-        if (input === correct) {
-            alert("✅ صحيح! تم فتح البوابة.");
-            startPuzzleSequence();
+    function unlockDoor() {
+        let input = document.getElementById('door-key-input').value.toUpperCase();
+        if (input === userKeys[cur - 1]) {
+            alert("✅ Access Granted!");
+            startPuzzle();
         } else {
             attempts--;
-            document.getElementById('attempt-txt').innerText = `محاولات متبقية: ${attempts}`;
+            document.getElementById('attempt-info').innerText = "Attempts: " + attempts;
             if (attempts <= 0) {
-                alert("❌ استنفدت المحاولات! سيتم تصفير مستواك.");
-                localStorage.removeItem('ff_data_' + currentUser);
+                alert("❌ Door Locked Forever! Resetting progress.");
+                localStorage.removeItem('riad_save_' + currentUser);
                 location.reload();
             }
         }
     }
 
     function saveProgress() {
-        localStorage.setItem('ff_data_' + currentUser, JSON.stringify({lvl: cur, keys: userKeys}));
+        localStorage.setItem('riad_save_' + currentUser, JSON.stringify({lvl: cur, keys: userKeys}));
     }
 
     function startTimer() {
@@ -274,14 +282,15 @@
             timeLeft--;
             let m = Math.floor(timeLeft / 60), s = timeLeft % 60;
             document.getElementById('timer-text').innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-            if (timeLeft <= 0) { clearInterval(timerInterval); document.getElementById('play-ui').classList.add('hidden'); document.getElementById('fail-screen').classList.remove('hidden'); }
+            if (timeLeft <= 30) document.getElementById('timer-box').classList.add('timer-red');
+            if (timeLeft <= 0) { clearInterval(timerInterval); document.getElementById('main-play-ui').classList.add('hidden'); document.getElementById('fail-screen').classList.remove('hidden'); }
         }, 1000);
     }
 
     function showFinal() {
-        document.getElementById('game-area').classList.add('hidden');
+        document.getElementById('main-play-ui').classList.add('hidden');
         document.getElementById('final-screen').classList.remove('hidden');
-        document.getElementById('victory-code').innerText = userKeys.join('');
+        document.getElementById('final-code-display').innerText = userKeys.join('');
     }
 </script>
 </body>
