@@ -2,151 +2,52 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Free Fire Challenge - Fast Test</title>
+    <title>Wealth Kings - GitHub</title>
     <style>
-        body { background: #0a0a0a; color: white; font-family: sans-serif; text-align: center; margin: 0; overflow-x: hidden; user-select: none; }
-        .container { padding: 15px; max-width: 500px; margin: auto; }
-        h1 { color: #ffd700; text-shadow: 2px 2px #ff4500; font-size: 24px; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .top-info { display: flex; justify-content: space-between; align-items: center; background: #1a1a1a; padding: 10px 15px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #333; }
-        #timer-box { font-size: 18px; font-weight: bold; color: #00ff00; }
-        #puzzle-board { display: grid; gap: 2px; margin: 15px auto; width: 90vw; height: 60vw; max-width: 400px; border: 2px solid #444; background: #111; }
-        .tile { background-repeat: no-repeat; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; touch-action: none; }
-        .selected { border: 4px solid #00ff00 !important; }
-        .hidden { display: none !important; }
-        .btn-next { background: #444; color: #888; border: none; padding: 15px; font-size: 20px; font-weight: bold; border-radius: 30px; width: 90%; margin-top: 20px; cursor: not-allowed; pointer-events: none; }
-        .btn-next.active { background: #28a745 !important; color: white !important; cursor: pointer !important; pointer-events: auto !important; }
-        .btn-retry { background: #ff4500; color: white; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; margin-top: 20px; }
+        /* سأضع لك التصميم الأساسي فقط للاختبار */
+        body { background: #0a0a0a; color: white; text-align: center; font-family: sans-serif; }
+        .hidden { display: none; }
+        .neon-wrapper { border: 2px solid red; padding: 20px; display: inline-block; }
     </style>
 </head>
-<body onload="initLevel()">
+<body>
 
-<div class="container">
-    <h1>Free Fire <span>💎 <span id="tokens-val">0</span></span></h1>
-    <div class="top-info">
-        <span style="font-weight:bold;">Level: <span id="lvl" style="color:cyan;">1</span></span>
-        <div id="timer-box"><span id="timer-text">02:00</span></div>
-    </div>
-    
-    <div id="game-area">
-        <div id="preview-screen">
-            <p style="color:#ffd700;">Memorize the Image!</p>
-            <img id="preview-img" src="" style="width:85%; border-radius:10px; border:4px solid #ffd700;">
-        </div>
-        
-        <div id="game-screen" class="hidden">
-            <div id="puzzle-board"></div>
-            <button id="next-lvl-btn" class="btn-next" onclick="nextLevel()">NEXT LEVEL</button>
-        </div>
-    </div>
-    
-    <div id="fail-screen" class="hidden">
-        <h2 style="color:red;">TIME'S UP!</h2>
-        <button class="btn-retry" onclick="initLevel()">TRY AGAIN</button>
-    </div>
-    
-    <div id="final-screen" class="hidden">
-        <h2 style="color: #ffd700;">ALL LEVELS CLEARED!</h2>
-        <button class="btn-retry" style="background:goldenrod" onclick="location.reload()">RESTART TEST</button>
-    </div>
-</div>
+    <div id="content-install"></div>
+    <div id="content-login"></div>
+    <div id="content-ui"></div>
+    <div id="content-area"></div>
+    <div id="content-fail"></div>
+    <div id="content-final"></div>
 
-<script>
-    let cur = 0, tokens = 0, timeLeft = 120, timerInterval = null, firstTile = null;
+    <script>
+        // دالة سحب الملفات من GitHub
+        async function loadParts() {
+            const parts = [
+                { id: 'content-install', file: 'install.html' },
+                { id: 'content-login', file: 'login.html' },
+                { id: 'content-ui', file: 'ui.html' },
+                { id: 'content-area', file: 'area.html' },
+                { id: 'content-fail', file: 'fail.html' },
+                { id: 'content-final', file: 'final.html' }
+            ];
 
-    // تم توحيد r (الصفوف) إلى 2 و c (الأعمدة) إلى 3 لجميع الصور
-    const levels = [
-        { img: 'https://i.ibb.co/MkbtPcTW/image.jpg', r: 2, c: 3 }, 
-        { img: 'https://i.ibb.co/6RTSMPfy/image.jpg', r: 2, c: 3 },
-        { img: 'https://i.ibb.co/F42mpCrd/image.jpg', r: 2, c: 3 }, 
-        { img: 'https://i.ibb.co/xKHHNRMH/image.jpg', r: 2, c: 3 },
-        { img: 'https://i.ibb.co/MkbtPcTW/image.jpg', r: 2, c: 3 }, 
-        { img: 'https://i.postimg.cc/B6K2ZWwf/13.jpg', r: 2, c: 3 },
-        { img: 'https://i.postimg.cc/rsgsMQTg/18.jpg', r: 2, c: 3 },
-        { img: 'https://i.postimg.cc/x1ZkXxzW/17.jpg', r: 2, c: 3 },
-        { img: 'https://i.postimg.cc/JhJhG1mk/19.jpg', r: 2, c: 3 },
-        { img: 'https://i.postimg.cc/nLcJtprz/20.jpg', r: 2, c: 3 }
-    ];
-
-    function initLevel() {
-        if (cur >= levels.length) { showFinal(); return; }
-        clearInterval(timerInterval);
-        const l = levels[cur];
-        document.getElementById('lvl').innerText = cur + 1;
-        document.getElementById('tokens-val').innerText = tokens;
-        document.getElementById('preview-img').src = l.img;
-        
-        document.getElementById('preview-screen').classList.remove('hidden');
-        document.getElementById('game-screen').classList.add('hidden');
-        document.getElementById('fail-screen').classList.add('hidden');
-        document.getElementById('next-lvl-btn').classList.remove('active');
-        
-        // إظهار الصورة لمدة ثانيتين ثم بدء اللعب
-        setTimeout(() => {
-            document.getElementById('preview-screen').classList.add('hidden');
-            document.getElementById('game-screen').classList.remove('hidden');
-            createBoard(); startTimer();
-        }, 2000);
-    }
-
-    function startTimer() {
-        timeLeft = 120;
-        const timerText = document.getElementById('timer-text');
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            const m = Math.floor(timeLeft / 60), s = timeLeft % 60;
-            timerText.innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                document.getElementById('game-screen').classList.add('hidden');
-                document.getElementById('fail-screen').classList.remove('hidden');
+            for (let part of parts) {
+                const response = await fetch(part.file);
+                const html = await response.text();
+                document.getElementById(part.id).innerHTML = html;
             }
-        }, 1000);
-    }
+            console.log("تم سحب جميع الحاويات بنجاح!");
+        }
 
-    function createBoard() {
-        const l = levels[cur], board = document.getElementById('puzzle-board');
-        board.style.gridTemplateRows = `repeat(${l.r}, 1fr)`; 
-        board.style.gridTemplateColumns = `repeat(${l.c}, 1fr)`;
-        board.innerHTML = '';
-        
-        let ids = Array.from({length: l.r * l.c}, (_, i) => i).sort(() => Math.random() - 0.5);
-        
-        ids.forEach(id => {
-            const tile = document.createElement('div');
-            tile.className = 'tile';
-            tile.style.backgroundImage = `url(${l.img})`;
-            tile.style.backgroundSize = `${l.c * 100}% ${l.r * 100}%`;
-            let r = Math.floor(id / l.c), c = id % l.c;
-            tile.style.backgroundPosition = `${(c / (l.c - 1)) * 100}% ${(r / (l.r - 1)) * 100}%`;
-            tile.dataset.id = id;
-            tile.onclick = function() {
-                if (!firstTile) { firstTile = this; this.classList.add('selected'); }
-                else {
-                    let tId = firstTile.dataset.id, tBg = firstTile.style.backgroundPosition;
-                    firstTile.dataset.id = this.dataset.id; firstTile.style.backgroundPosition = this.style.backgroundPosition;
-                    this.dataset.id = tId; this.style.backgroundPosition = tBg;
-                    firstTile.classList.remove('selected'); firstTile = null;
-                    if (Array.from(document.querySelectorAll('.tile')).every((t, i) => parseInt(t.dataset.id) === i)) {
-                        clearInterval(timerInterval);
-                        document.getElementById('next-lvl-btn').classList.add('active');
-                    }
-                }
-            };
-            board.appendChild(tile);
-        });
-    }
+        // تشغيل السحب عند فتح الصفحة
+        window.onload = loadParts;
 
-    function nextLevel() {
-        tokens += 20;
-        cur++;
-        initLevel();
-    }
-
-    function showFinal() {
-        document.getElementById('game-area').classList.add('hidden');
-        document.getElementById('final-screen').classList.remove('hidden');
-    }
-</script>
+        // هنا تضع باقي أكواد الـ JavaScript الخاصة باللعبة (Logic)
+        function checkInstallThenLogin() {
+            document.getElementById('login-screen').classList.add('hidden');
+            alert("تم تسجيل الدخول بنجاح!");
+            // ابدأ اللعبة هنا
+        }
+    </script>
 </body>
 </html>
