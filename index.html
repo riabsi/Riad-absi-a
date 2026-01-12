@@ -3,111 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Free Fire Challenge - Offline Version</title>
+    <title>Free Fire Challenge - Fast Test</title>
     <style>
         body { background: #0a0a0a; color: white; font-family: sans-serif; text-align: center; margin: 0; overflow-x: hidden; user-select: none; }
         .container { padding: 15px; max-width: 500px; margin: auto; }
         h1 { color: #ffd700; text-shadow: 2px 2px #ff4500; font-size: 24px; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0a0a0a; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .login-box { background: #1a1a1a; padding: 25px; border-radius: 15px; border: 1px solid #ffd700; width: 85%; max-width: 350px; }
-        .goal-title { color: #ffd700; font-weight: bold; margin-bottom: 15px; font-size: 16px; text-transform: uppercase; }
-        .goal-buttons { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
-        .goal-btn { background: #333; color: #fff; border: 1px solid #555; padding: 8px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; }
-        .goal-btn.active { background: #ffd700; color: black; border-color: #fff; }
-        .user-input { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: 1px solid #444; background: #222; color: white; font-size: 16px; box-sizing: border-box; }
-        .start-btn { background: #28a745; color: white; border: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; margin-top: 20px; cursor: pointer; width: 100%; }
-        .top-info { display: flex; justify-content: space-between; align-items: center; background: #1a1a1a; padding: 8px 12px; border-radius: 10px; margin-bottom: 5px; border: 1px solid #333; }
-        #timer-box { font-size: 18px; font-weight: bold; color: #00ff00; display: flex; align-items: center; gap: 5px; }
-        .ad-ticker-box { background: #111; border: 2px solid #ffd700; height: 55px; overflow: hidden; position: relative; display: flex; align-items: center; margin: 10px 0; border-radius: 8px; }
-        #external-ads { white-space: nowrap; position: absolute; width: 100%; color: #ffd700; font-weight: bold; font-size: 16px; display: flex; align-items: center; justify-content: center; }
-        #puzzle-board { display: grid; gap: 1px; margin: 15px auto; width: 92vw; height: 92vw; max-width: 400px; border: 2px solid #444; background: #111; }
-        .tile { background-repeat: no-repeat; border: 0.5px solid rgba(255,255,255,0.1); cursor: pointer; touch-action: none; }
-        .selected { border: 3px solid #00ff00 !important; }
+        .top-info { display: flex; justify-content: space-between; align-items: center; background: #1a1a1a; padding: 10px 15px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #333; }
+        #timer-box { font-size: 18px; font-weight: bold; color: #00ff00; }
+        #puzzle-board { display: grid; gap: 2px; margin: 15px auto; width: 90vw; height: 60vw; max-width: 400px; border: 2px solid #444; background: #111; }
+        .tile { background-repeat: no-repeat; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; touch-action: none; }
+        .selected { border: 4px solid #00ff00 !important; }
         .hidden { display: none !important; }
-        .btn-retry { background: #ff4500; color: white; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; }
-        #next-lvl-btn { background: #444; color: #888; border: none; padding: 15px; font-size: 20px; font-weight: bold; border-radius: 30px; width: 90%; margin-top: 20px; cursor: not-allowed; pointer-events: none; }
-        #next-lvl-btn.active { background: #28a745 !important; color: white !important; cursor: pointer !important; pointer-events: auto !important; }
+        .btn-next { background: #444; color: #888; border: none; padding: 15px; font-size: 20px; font-weight: bold; border-radius: 30px; width: 90%; margin-top: 20px; cursor: not-allowed; pointer-events: none; }
+        .btn-next.active { background: #28a745 !important; color: white !important; cursor: pointer !important; pointer-events: auto !important; }
+        .btn-retry { background: #ff4500; color: white; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; margin-top: 20px; }
     </style>
 </head>
-<body>
-
-<div id="login-screen">
-    <div class="login-box">
-        <div class="goal-title">Choose Your Goal</div>
-        <div class="goal-buttons">
-            <button class="goal-btn active">Free Fire Tokens</button>
-        </div>
-        <h3 style="color: #ffd700; margin: 5px;">GitHub Testing Mode</h3>
-        <input type="text" id="password-input" class="user-input" placeholder="ادخل أي كلمة مرور للفحص...">
-        <button class="start-btn" onclick="handleLogin()">دخول للفحص (بدون سيرفر)</button>
-    </div>
-</div>
+<body onload="initLevel()">
 
 <div class="container">
-    <h1>Free Fire Token <span>💎 <span id="tokens-val">0</span></span></h1>
+    <h1>Free Fire <span>💎 <span id="tokens-val">0</span></span></h1>
     <div class="top-info">
         <span style="font-weight:bold;">Level: <span id="lvl" style="color:cyan;">1</span></span>
         <div id="timer-box"><span id="timer-text">02:00</span></div>
     </div>
-    <div class="ad-ticker-box"><div id="external-ads">🚀 Testing Mode Active 🚀</div></div>
     
     <div id="game-area">
-        <div id="preview-screen"><p>Memorize!</p><img id="preview-img" src="" style="width:85%; border-radius:10px; border:4px solid #ffd700;"></div>
+        <div id="preview-screen">
+            <p style="color:#ffd700;">Memorize the Image!</p>
+            <img id="preview-img" src="" style="width:85%; border-radius:10px; border:4px solid #ffd700;">
+        </div>
+        
         <div id="game-screen" class="hidden">
             <div id="puzzle-board"></div>
-            <button id="next-lvl-btn" onclick="nextLevelWithAd()">NEXT LEVEL</button>
+            <button id="next-lvl-btn" class="btn-next" onclick="nextLevel()">NEXT LEVEL</button>
         </div>
     </div>
     
-    <div id="fail-screen" class="hidden"><h2>TIME'S UP!</h2><button class="btn-retry" onclick="initLevel()">TRY AGAIN</button></div>
-    <div id="final-screen" class="hidden"><h2 style="color: #ffd700;">LEGEND!</h2><button class="btn-retry" style="background:goldenrod" onclick="resetGame()">RESTART</button></div>
+    <div id="fail-screen" class="hidden">
+        <h2 style="color:red;">TIME'S UP!</h2>
+        <button class="btn-retry" onclick="initLevel()">TRY AGAIN</button>
+    </div>
+    
+    <div id="final-screen" class="hidden">
+        <h2 style="color: #ffd700;">ALL LEVELS CLEARED!</h2>
+        <button class="btn-retry" style="background:goldenrod" onclick="location.reload()">RESTART TEST</button>
+    </div>
 </div>
 
 <script>
     let cur = 0, tokens = 0, timeLeft = 120, timerInterval = null, firstTile = null;
 
+    // تم توحيد r (الصفوف) إلى 2 و c (الأعمدة) إلى 3 لجميع الصور
     const levels = [
-        { img: 'https://i.ibb.co/MkbtPcTW/image.jpg', r: ٢, c: 3 }, 
+        { img: 'https://i.ibb.co/MkbtPcTW/image.jpg', r: 2, c: 3 }, 
         { img: 'https://i.ibb.co/6RTSMPfy/image.jpg', r: 2, c: 3 },
         { img: 'https://i.ibb.co/F42mpCrd/image.jpg', r: 2, c: 3 }, 
         { img: 'https://i.ibb.co/xKHHNRMH/image.jpg', r: 2, c: 3 },
-        { img: 'https://i.ibb.co/MkbtPcTW/image.jpg', r: 2, c: 5 }, 
-        { img: 'https://i.postimg.cc/B6K2ZWwf/13.jpg', r: 2, c: 4 },
-        { img: 'https://i.postimg.cc/rsgsMQTg/18.jpg', r: 2, c: 8 },
-        { img: 'https://i.postimg.cc/x1ZkXxzW/17.jpg', r: 2, c: 8 },
-        { img: 'https://i.postimg.cc/JhJhG1mk/19.jpg', r: 2, c: 8 },
-        { img: 'https://i.postimg.cc/nLcJtprz/20.jpg', r: 2, c: 10 }
+        { img: 'https://i.ibb.co/MkbtPcTW/image.jpg', r: 2, c: 3 }, 
+        { img: 'https://i.postimg.cc/B6K2ZWwf/13.jpg', r: 2, c: 3 },
+        { img: 'https://i.postimg.cc/rsgsMQTg/18.jpg', r: 2, c: 3 },
+        { img: 'https://i.postimg.cc/x1ZkXxzW/17.jpg', r: 2, c: 3 },
+        { img: 'https://i.postimg.cc/JhJhG1mk/19.jpg', r: 2, c: 3 },
+        { img: 'https://i.postimg.cc/nLcJtprz/20.jpg', r: 2, c: 3 }
     ];
 
-    function handleLogin() {
-        // تحميل التقدم من ذاكرة المتصفح (اختياري)
-        const savedLvl = localStorage.getItem('local_lvl');
-        if (savedLvl) { cur = parseInt(savedLvl) - 1; }
-        tokens = cur * 20;
-        document.getElementById('login-screen').style.display = 'none';
-        initLevel();
-    }
-
     function initLevel() {
-        if (cur >= levels.length) {
-            showFinal();
-            return;
-        }
+        if (cur >= levels.length) { showFinal(); return; }
         clearInterval(timerInterval);
         const l = levels[cur];
         document.getElementById('lvl').innerText = cur + 1;
         document.getElementById('tokens-val').innerText = tokens;
         document.getElementById('preview-img').src = l.img;
+        
         document.getElementById('preview-screen').classList.remove('hidden');
         document.getElementById('game-screen').classList.add('hidden');
         document.getElementById('fail-screen').classList.add('hidden');
         document.getElementById('next-lvl-btn').classList.remove('active');
         
+        // إظهار الصورة لمدة ثانيتين ثم بدء اللعب
         setTimeout(() => {
             document.getElementById('preview-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('hidden');
             createBoard(); startTimer();
-        }, 3000);
+        }, 2000);
     }
 
     function startTimer() {
@@ -130,7 +109,9 @@
         board.style.gridTemplateRows = `repeat(${l.r}, 1fr)`; 
         board.style.gridTemplateColumns = `repeat(${l.c}, 1fr)`;
         board.innerHTML = '';
+        
         let ids = Array.from({length: l.r * l.c}, (_, i) => i).sort(() => Math.random() - 0.5);
+        
         ids.forEach(id => {
             const tile = document.createElement('div');
             tile.className = 'tile';
@@ -156,23 +137,16 @@
         });
     }
 
-    function nextLevelWithAd() {
+    function nextLevel() {
         tokens += 20;
         cur++;
-        localStorage.setItem('local_lvl', cur + 1); // حفظ التقدم محلياً
         initLevel();
     }
 
     function showFinal() {
-        document.getElementById('game-screen').classList.add('hidden');
+        document.getElementById('game-area').classList.add('hidden');
         document.getElementById('final-screen').classList.remove('hidden');
-    }
-
-    function resetGame() {
-        localStorage.removeItem('local_lvl');
-        cur = 0; tokens = 0;
-        location.reload();
     }
 </script>
 </body>
-  </html>
+</html>
